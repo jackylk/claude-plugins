@@ -1,4 +1,8 @@
 {
+  "name": "jackylk-claude-plugins",
+  "owner": {
+    "name": "jackylk"
+  },
   "plugins": [
     {
       "name": "huawei-cloud-style",
