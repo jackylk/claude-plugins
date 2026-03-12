@@ -13,7 +13,7 @@ SRE operations console template with standard 13-page structure: overview, user/
 ## Installation
 
 ```bash
-/plugin marketplace add MatrixDriver/claude-plugins
+/plugin marketplace add jackylk/claude-plugins
 /plugin install jacky-ui-skills
 ```
 
