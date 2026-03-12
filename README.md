@@ -14,7 +14,7 @@ SRE operations console template with standard 13-page structure: overview, user/
 
 ```bash
 /plugin marketplace add jackylk/claude-plugins
-/plugin install jacky-ui-skills
+/plugin install huawei-cloud-style
 ```
 
 Or test locally:
