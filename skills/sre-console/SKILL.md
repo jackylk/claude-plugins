@@ -117,14 +117,18 @@ Application and system performance metrics.
 
 ### 7. Logs (日志) — `/sre/logs`
 
-Log viewer with component selection and search.
+API request log viewer with filtering, pagination, and detail panel.
 
-**Components:**
-- Component selector (tabs or dropdown): API server, database, containers, etc.
-- Search input with filter
-- Log output area (monospace, dark background for terminal feel, or light with line numbers)
-- Line count control
-- Auto-refresh option
+**Filter bar:** endpoint search input + search button
+**Columns:** endpoint (monospace), tenant, space, status code (color-coded), response time (ms), timestamp, actions (detail link)
+**Pagination:** prev/next buttons with "page N of total" display
+**Detail side panel** (slides in from right, 480px):
+- Two tabs: "请求详情" and "响应详情"
+- Request tab: status badge (SUCCESS/ERROR), duration, tenant, space, log ID, endpoint, status code, timestamp, request headers (formatted JSON), request body (formatted JSON)
+- Response tab: response headers (formatted JSON), response body (formatted JSON)
+- JSON formatter: `try { JSON.stringify(JSON.parse(raw), null, 2) } catch { raw }`
+
+**Backend**: Middleware captures request/response headers+body (10KB max, sensitive headers filtered), stored in usage_logs table. Admin API joins with tenant/space for display names.
 
 ### 8. Alerts (告警) — `/sre/alerts`
 
@@ -326,3 +330,75 @@ Key principles:
 - Use null-safe rendering (`?.toFixed()`, `?? "-"`)
 - Format dates consistently with `toLocaleString("zh-CN")`
 - Row hover with state tracking
+
+## Detail Page Pattern
+
+For resources that need a dedicated detail view (e.g., tenant detail):
+
+```tsx
+// /sre/tenants/[tenantId]/page.tsx
+"use client";
+import { useParams } from "next/navigation";
+
+export default function TenantDetailPage() {
+  const { tenantId } = useParams<{ tenantId: string }>();
+  // Fetch detail, show key-value card layout
+  // Back button: router.push("/sre/tenants")
+  // Action buttons: Suspend/Activate, Make Admin/Remove Admin
+}
+```
+
+For inline detail without navigation, use the **Detail Side Panel** pattern (see `huawei-cloud-style` skill).
+
+## Trace Viewer Pattern
+
+For distributed tracing or pipeline debugging:
+
+**Components:**
+- Space selector dropdown (choose which space/resource to trace)
+- Start/Stop trace button with status indicator
+- Buffer size display
+- Expandable trace rows showing spans
+- Span visualization: status dot + name + horizontal duration bar + duration in ms
+- Span metadata as formatted JSON
+
+**Key patterns:**
+- Polling interval for active traces (e.g., every 3 seconds)
+- Expandable rows with click-to-toggle
+- Duration bars proportional to max span duration
+
+## Request/Response Capture Middleware
+
+For the log detail panel to show request/response data, the backend middleware must:
+
+1. **Capture request body**: `await request.body()` before `call_next`
+2. **Capture response body**: Consume `response.body_iterator`, collect chunks, rebuild Response
+3. **Filter sensitive headers**: Skip `authorization`, `cookie`, `x-api-key`
+4. **Truncate large bodies**: 10KB max with truncation notice
+5. **Fire-and-forget write**: `asyncio.create_task(_write_log(...))` to avoid blocking response
+
+```python
+# Sensitive header filtering
+skip = {"authorization", "cookie", "x-api-key"}
+headers = {k: v for k, v in request.headers.items() if k.lower() not in skip}
+
+# Body truncation
+MAX_BODY = 10_240
+text = data.decode("utf-8")
+if len(text) > MAX_BODY:
+    text = text[:MAX_BODY] + f"\n... (truncated, total {len(text)} chars)"
+```
+
+## Database Migration Pattern
+
+When adding new columns to existing tables, use safe migration in the DB init:
+
+```python
+# Add columns if they don't exist (idempotent)
+for col in ("request_headers", "request_body", "response_headers", "response_body"):
+    await conn.execute(text(
+        f"ALTER TABLE usage_logs ADD COLUMN IF NOT EXISTS {col} TEXT"
+    ))
+```
+
+This runs on every startup but is idempotent thanks to `IF NOT EXISTS`.

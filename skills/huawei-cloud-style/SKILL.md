@@ -349,6 +349,120 @@ Centralize API calls in a shared client file with:
 - Automatic redirect on 401/403
 - Typed fetch functions per resource
 
+## Detail Side Panel
+
+A common pattern for viewing record details without leaving the list page. The panel slides in from the right over a backdrop.
+
+```tsx
+{/* Backdrop */}
+<div
+  onClick={onClose}
+  style={{
+    position: "fixed", inset: 0,
+    background: "rgba(0,0,0,0.15)",
+    zIndex: 999,
+  }}
+/>
+{/* Panel */}
+<div style={{
+  position: "fixed", top: 0, right: 0, bottom: 0,
+  width: 480,
+  background: "#fff",
+  boxShadow: "-4px 0 16px rgba(0,0,0,0.08)",
+  zIndex: 1000,
+  display: "flex", flexDirection: "column",
+  fontFamily: FONT_FAMILY,
+}}>
+  {/* Header: title + close button */}
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px 0" }}>
+    <div style={{ fontSize: 16, fontWeight: 600, color: "#191919" }}>Title</div>
+    <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, color: "#8a8e99", cursor: "pointer" }}>×</button>
+  </div>
+  {/* Optional tabs */}
+  {/* Scrollable content */}
+  <div style={{ padding: "16px 24px", flex: 1, overflowY: "auto" }}>
+    {/* Key-value rows, code blocks, etc. */}
+  </div>
+</div>
+```
+
+### Tabs in Side Panel
+
+```tsx
+const tabBase: React.CSSProperties = {
+  padding: "10px 20px", fontSize: 14, cursor: "pointer",
+  background: "none", border: "none",
+  borderBottom: "2px solid transparent",
+  color: "#575d6c", fontFamily: FONT_FAMILY,
+};
+const tabActive: React.CSSProperties = {
+  ...tabBase, color: "#0073e6", borderBottomColor: "#0073e6", fontWeight: 500,
+};
+```
+
+### Key-Value Rows
+
+```tsx
+const rowStyle: React.CSSProperties = {
+  display: "flex", gap: 16, padding: "10px 0",
+  borderBottom: "1px solid #f0f0f0",
+};
+const labelStyle: React.CSSProperties = { fontSize: 13, color: "#575d6c", minWidth: 80, flexShrink: 0 };
+const valueStyle: React.CSSProperties = { fontSize: 13, color: "#191919", wordBreak: "break-all" };
+```
+
+### Code Blocks (for JSON/headers/body)
+
+```tsx
+const sectionTitle: React.CSSProperties = {
+  fontSize: 13, fontWeight: 600, color: "#191919", marginBottom: 8,
+};
+
+const codeBlock: React.CSSProperties = {
+  background: "#f7f8fa",
+  border: "1px solid #e5e5e5",
+  borderRadius: 4,
+  padding: "12px 16px",
+  fontSize: 12,
+  fontFamily: "monospace",
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-all",
+  maxHeight: 300,
+  overflowY: "auto",
+  margin: 0,
+  color: "#333",
+};
+
+// Format JSON strings for display
+function formatJson(raw: string): string {
+  try { return JSON.stringify(JSON.parse(raw), null, 2); }
+  catch { return raw; }
+}
+```
+
+## Collapsible Sidebar
+
+The sidebar supports collapse/expand with smooth transition:
+
+```tsx
+// Collapsed: 60px width, show only icons or abbreviated labels
+// Expanded: 220px width, full labels
+const sidebarStyle: React.CSSProperties = {
+  width: collapsed ? 60 : 220,
+  minWidth: collapsed ? 60 : 220,
+  transition: "width 0.2s, min-width 0.2s",
+  background: "#fff",
+  borderRight: "1px solid #e5e5e5",
+  overflowY: "auto",
+};
+```
+
+## Responsive / Mobile
+
+- Sidebar: hidden on mobile (`max-width: 768px`), replaced by a hamburger toggle button in the header
+- Tables: wrapped in `overflow-x: auto` container
+- Grid layouts: use `auto-fit, minmax(200px, 1fr)` for metric cards
+
 ## Null Safety
 
 Always use optional chaining when rendering API data:

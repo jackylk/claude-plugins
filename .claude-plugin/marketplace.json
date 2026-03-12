@@ -6,7 +6,15 @@
   "plugins": [
     {
       "name": "huawei-cloud-style",
-      "description": "Huawei Cloud style UI design system and SRE console template",
+      "description": "Huawei Cloud style UI design system for enterprise consoles and admin panels",
+      "source": {
+        "source": "github",
+        "repo": "jackylk/claude-plugins"
+      }
+    },
+    {
+      "name": "sre-console",
+      "description": "SRE operations console template with standard pages for metrics, logs, alerts, and cloud resource management",
       "source": {
         "source": "github",
         "repo": "jackylk/claude-plugins"
