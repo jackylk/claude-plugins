@@ -1,6 +1,6 @@
 ---
 name: sre-console
-description: Build an SRE operations console (运维控制台) with standard menu structure and pages. Use this skill when the user wants to create an SRE console, operations dashboard, admin panel for infrastructure management, or any monitoring/management console for a cloud-native application. Triggers on phrases like "SRE控制台", "运维控制台", "operations console", "admin console for infrastructure", or when building a management interface that needs metrics, logs, alerts, cloud resources, or user management pages. This skill depends on the huawei-cloud-style skill for visual design.
+description: Build an SRE operations console (运维控制台) with standard menu structure and pages. Use this skill when the user wants to create an SRE console, operations dashboard, admin panel for infrastructure management, or any monitoring/management console for a cloud-native application. Triggers on phrases like "SRE控制台", "运维控制台", "operations console", "admin console for infrastructure", or when building a management interface that needs metrics, logs, alerts, cloud resources, or user management pages. This skill depends on the hcloud-frontend-style skill for visual design.
 ---
 
 # SRE Console Template

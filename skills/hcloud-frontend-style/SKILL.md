@@ -1,5 +1,5 @@
 ---
-name: huawei-cloud-style
+name: hcloud-frontend-style
 description: Create web pages and consoles using Huawei Cloud console UI style. Use this skill whenever the user mentions "华为云风格", "Huawei Cloud style", wants a console/admin panel with a professional enterprise look, or is building any management dashboard or operations console. Also trigger when creating table-heavy pages, sidebar navigation layouts, or enterprise-style admin UIs. This skill defines the complete design system — layout, colors, typography, navigation, tables, cards, buttons, forms, and login pages.
 ---
 

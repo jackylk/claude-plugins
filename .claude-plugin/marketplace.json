@@ -13,7 +13,7 @@
       }
     },
     {
-      "name": "huawei-cloud-style",
+      "name": "hcloud-frontend-style",
       "description": "Huawei Cloud style UI design system for enterprise consoles and admin panels",
       "source": {
         "source": "github",
