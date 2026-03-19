@@ -1,9 +1,17 @@
 {
-  "name": "jackylk-claude-plugins",
+  "name": "jackylk-hcloud",
   "owner": {
     "name": "jackylk"
   },
   "plugins": [
+    {
+      "name": "hcloud",
+      "description": "Operate Huawei Cloud services using hcloud CLI (KooCLI) — ECS, CCE, VPC, ELB, RDS, OBS, IAM, SWR, and 150+ services",
+      "source": {
+        "source": "github",
+        "repo": "jackylk/claude-plugins"
+      }
+    },
     {
       "name": "huawei-cloud-style",
       "description": "Huawei Cloud style UI design system for enterprise consoles and admin panels",

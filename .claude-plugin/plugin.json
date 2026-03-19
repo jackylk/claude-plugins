@@ -1,7 +1,7 @@
 {
-  "name": "huawei-cloud-style",
+  "name": "hcloud",
   "version": "1.0.0",
-  "description": "Huawei Cloud style UI design system and SRE console template for Claude Code",
+  "description": "Huawei Cloud CLI (hcloud/KooCLI) skills for managing cloud resources — ECS, CCE, VPC, ELB, RDS, OBS, IAM, SWR, and 150+ services",
   "author": {
     "name": "jacky"
   }
